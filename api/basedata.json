@@ -9,13 +9,16 @@
     
         },
         {
-             "nombre":"teclado",
+            "id": "002",
+            "nombre":"teclado",
             "precioUnidad": 30000,
             "stock":54,
             "descripcion":"teclado mecanico"
         },
         {
-             "nombre":"teclado",
+
+            "id":"003",
+            "nombre":"teclado",
             "precioUnidad": 30000,
             "stock":54,
             "descripcion":"teclado mecanico"
