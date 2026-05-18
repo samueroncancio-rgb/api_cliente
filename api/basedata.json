@@ -1,27 +1,32 @@
 {
-    "productos":[
-        {
-            "id":"001",
-            "nombre":"teclado",
-            "precioUnidad": 30000,
-            "stock":54,
-            "descripcion":"teclado mecanico"
-    
-        },
-        {
-            "id": "002",
-            "nombre":"teclado",
-            "precioUnidad": 30000,
-            "stock":54,
-            "descripcion":"teclado mecanico"
-        },
-        {
-
-            "id":"003",
-            "nombre":"teclado",
-            "precioUnidad": 30000,
-            "stock":54,
-            "descripcion":"teclado mecanico"
-        }
-    ]
+  "productos": [
+    {
+      "id": "001",
+      "nombre": "teclado",
+      "precioUnidad": 30000,
+      "stock": 54,
+      "descripcion": "teclado mecanico"
+    },
+    {
+      "id": "002",
+      "nombre": "Mause",
+      "precioUnidad": 80000,
+      "stock": 87,
+      "descripcion": "Mause inalambrico"
+    },
+    {
+      "id": "003",
+      "nombre": "Monitor",
+      "precioUnidad": 200000,
+      "stock": 64,
+      "descripcion": ""
+    },
+    {
+      "nombre": "Telefono samsung glx26",
+      "precioUnidad": 50000,
+      "stock": 20,
+      "descripcion": "Telefono samsung de 240 gb de almacenamiento",
+      "id": "rc8tn0R"
+    }
+  ]
 }

@@ -19,10 +19,10 @@ async function traerProductos() {
 traerProductos()
 
 function imprimirProductos(listaDeLosProductos) {
-const tablaProducto = document.getElementById("inventory-list")
-tablaProducto.innerHTML =''
-for (const producto of listaDeLosProductos) {
-tablaProducto.innerHTML += `
+    const tablaProducto = document.getElementById("inventory-list")
+    tablaProducto.innerHTML = ''
+    for (const producto of listaDeLosProductos) {
+        tablaProducto.innerHTML += `
 <tr class="hover:bg-slate-50/30 transition-colors group">
 <td class="px-8 py-6">
     <div class="flex flex-col">
@@ -41,7 +41,7 @@ tablaProducto.innerHTML += `
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
         </svg>
     </button>
-    <button class="w-10 h-10 flex items-center justify-center text-rose-600 hover:bg-rose-50 rounded-xl transition-all border border-transparent hover:border-rose-100" title="Eliminar">
+    <button class="eliminar-btn w-10 h-10 flex items-center justify-center text-rose-600 hover:bg-rose-50 rounded-xl transition-all border border-transparent hover:border-rose-100" data-id="${producto.id}" title="Eliminar">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
         </svg>
@@ -49,14 +49,89 @@ tablaProducto.innerHTML += `
     </div>
 </td>
 </tr>
-`    
-    
+`
+
+    }
+    asignarEventosEliminar();
 }
+
+document.getElementById('product-form').addEventListener('submit', agregarProducto);
+
+async function agregarProducto(evento) {
+    evento.preventDefault();  // Evita que recargue la página
+
+    // Leer los valores del formulario
+    const nombre = document.getElementById('nombre').value;
+    const precio = parseFloat(document.getElementById('precio').value);
+    const stock = parseInt(document.getElementById('stock').value);
+    const descripcion = document.getElementById('descripcion').value;
+
+    // Validar que los campos importantes estén llenos
+    if (!nombre || precio <= 0 || stock < 0) {
+        alert("Revisa que nombre, precio (>0) y stock (>=0) estén bien");
+        return;
+    }
+
+    // Armar el objeto que espera la API (precioUnidad, no precio)
+    const nuevoProducto = {
+        nombre: nombre,
+        precioUnidad: precio,
+        stock: stock,
+        descripcion: descripcion
+    };
+
+    // Enviar a la API con POST
+    const respuesta = await fetch("http://localhost:3000/productos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nuevoProducto)
+    });
+
+    if (respuesta.ok) {
+        alert("Producto agregado");
+        document.getElementById('product-form').reset(); // Limpiar formulario
+        traerProductos(); // Recargar la tabla (ya tienes esta función)
+    } else {
+        alert("Error al guardar");
+    }
 }
 
+// Función que elimina el producto por su id
+async function eliminarProducto(id) {
+    const confirmar = confirm("¿Eliminar este producto?");
+    if (!confirmar) return;
 
+    try {
+        const respuesta = await fetch(`http://localhost:3000/productos/${id}`, {
+            method: "DELETE"
+        });
 
+        if (respuesta.ok) {
+            alert("Producto eliminado");
+            traerProductos(); // Recargar tabla
+        } else {
+            alert("Error al eliminar");
+        }
+    } catch (error) {
+        console.error("Error en eliminación:", error);
+        alert("No se pudo eliminar");
+    }
+}
 
+// Función que asigna el evento click a cada botón eliminar
+function asignarEventosEliminar() {
+    const botonesEliminar = document.querySelectorAll('.eliminar-btn');
+    botonesEliminar.forEach(btn => {
+        btn.removeEventListener('click', manejadorEliminar); // evita duplicados
+        btn.addEventListener('click', manejadorEliminar);
+    });
+}
+
+// Manejador del click (obtiene el id del producto)
+function manejadorEliminar(evento) {
+    const id = parseInt(evento.currentTarget.getAttribute('data-id'));
+    eliminarProducto(id);
+}
 
 
 
