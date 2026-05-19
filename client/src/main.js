@@ -8,11 +8,15 @@ async function traerProductos() {
 
         const datos = await response.json()
         imprimirProductos(datos)
+        const totalPrecio= datos.reduce((acc,data)=> acc+data.precioUnidad*data.stock,0)
+        const precio= document.getElementById("stat-value")
+        precio.textContent=totalPrecio
+
+        const stockTotal=datos.reduce((acc,data)=> acc+data.stock,0)
+        const stockGlobal=document.getElementById('stock-cantidad')
+        stockGlobal.textContent=stockTotal
     } catch (error) {
-        alert("ha ocurrido un error intente más tarde")
         console.error(error)
-
-
     }
 }
 
@@ -36,10 +40,13 @@ function imprimirProductos(listaDeLosProductos) {
 <td class="px-8 py-6 text-center font-bold text-slate-900">COP ${producto.precioUnidad}</td>
 <td class="px-8 py-6 text-right">
     <div class="flex justify-end gap-3">
-    <button class="w-10 h-10 flex items-center justify-center text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all border border-transparent hover:border-indigo-100" title="Editar">
+
+    <button class="w-10 h-10 flex items-center justify-center text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all border border-transparent hover:border-indigo-100" id="editar-btn" data-id="${producto.id}" data-nombre="${producto.nombre}" data-stock="${producto.stock}" data-precioUnidad="${producto.precioUnidad}" data-descripcion="${producto.descripcion}" title="Editar">
+
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
         </svg>
+
     </button>
     <button class="eliminar-btn w-10 h-10 flex items-center justify-center text-rose-600 hover:bg-rose-50 rounded-xl transition-all border border-transparent hover:border-rose-100" data-id="${producto.id}" title="Eliminar">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -53,6 +60,7 @@ function imprimirProductos(listaDeLosProductos) {
 
     }
     asignarEventosEliminar();
+    asignarEventosActualizar();
 }
 
 document.getElementById('product-form').addEventListener('submit', agregarProducto);
@@ -98,40 +106,86 @@ async function agregarProducto(evento) {
 
 // Función que elimina el producto por su id
 async function eliminarProducto(id) {
-    const confirmar = confirm("¿Eliminar este producto?");
-    if (!confirmar) return;
-
-    try {
-        const respuesta = await fetch(`http://localhost:3000/productos/${id}`, {
-            method: "DELETE"
-        });
-
-        if (respuesta.ok) {
-            alert("Producto eliminado");
-            traerProductos(); // Recargar tabla
-        } else {
-            alert("Error al eliminar");
-        }
-    } catch (error) {
-        console.error("Error en eliminación:", error);
-        alert("No se pudo eliminar");
+    const confirmar =confirm("seguro que desea eliminar el producto")
+    if(confirmar){
+        const respuesta=await fetch(`http://localhost:3000/productos/${id}`,{
+            method:"DELETE"
+        })
+        if(respuesta.ok){
+        alert("Producto eliminado")
+        traerProductos()
     }
+
+
+    }
+
+    
+    
 }
+
 
 // Función que asigna el evento click a cada botón eliminar
 function asignarEventosEliminar() {
-    const botonesEliminar = document.querySelectorAll('.eliminar-btn');
+   const botonesEliminar = document.querySelectorAll('.eliminar-btn');
     botonesEliminar.forEach(btn => {
-        btn.removeEventListener('click', manejadorEliminar); // evita duplicados
-        btn.addEventListener('click', manejadorEliminar);
-    });
+        
+        btn.addEventListener('click', (e)=>{
+            const id = e.currentTarget.getAttribute("data-id")
+            eliminarProducto(id)
+
+        });
+   });
 }
 
-// Manejador del click (obtiene el id del producto)
-function manejadorEliminar(evento) {
-    const id = parseInt(evento.currentTarget.getAttribute('data-id'));
-    eliminarProducto(id);
+
+async function actualizarProducto(id,nombre,stock,precioUnidad,descripcion){
+    const nombreInput = document.getElementById('nombre');
+    const precioInput = (document.getElementById('precio'));
+    const stockInput = (document.getElementById('stock'));
+    const descripcionInput = document.getElementById('descripcion');
+    
+    nombreInput.value = nombre;
+    precioInput.value= parseFloat(precioUnidad);
+    stockInput.value= parseInt(stock);
+    descripcionInput.value=descripcion;
+    
+    const productosActualizados=[
+        {
+            nombre:nombreInput.value,
+            precio:precioInput.value,
+            stock:stockInput.value,
+            descripcion:descripcionInput.value
+
+        }
+    ]
+    const respuesta = await fetch (`http://localhost:3000/productos/${id}`,{
+            method:"PUT"
+        }) 
+
+
+
+
 }
+function asignarEventosActualizar() {
+   const botonesActualizar = document.querySelectorAll("#editar-btn");
+    botonesActualizar.forEach(btn => {
+        
+        btn.addEventListener('click', (e)=>{
+            const id = e.currentTarget.getAttribute("data-id")
+           
+            const nombre = e.currentTarget.getAttribute("data-nombre")
+            const stock = e.currentTarget.getAttribute("data-stock")
+            const precioUnidad = e.currentTarget.getAttribute("data-precioUnidad")
+            const descripcion = e.currentTarget.getAttribute("data-descripcion")
+
+            actualizarProducto(id,nombre,stock,precioUnidad,descripcion)
+           
+           
+
+        });
+   });
+}
+
 
 
 
