@@ -8,13 +8,18 @@ async function traerProductos() {
 
         const datos = await response.json()
         imprimirProductos(datos)
-        const totalPrecio= datos.reduce((acc,data)=> acc+data.precioUnidad*data.stock,0)
-        const precio= document.getElementById("stat-value")
-        precio.textContent=totalPrecio
+        const totalPrecio = datos.reduce((acc, data) => acc + data.precioUnidad * data.stock, 0)
+        const precio = document.getElementById("stat-value")
+        precio.textContent = totalPrecio
+        datos.forEach((i) => {
+            console.log(typeof(i.stock));
+            
+        })
 
-        const stockTotal=datos.reduce((acc,data)=> acc+data.stock,0)
-        const stockGlobal=document.getElementById('stock-cantidad')
-        stockGlobal.textContent=stockTotal
+        const stockTotal = datos.reduce((acc, data) => acc + data.stock, 0)
+        
+        const stockGlobal = document.getElementById('stock-cantidad')
+        stockGlobal.textContent = stockTotal
     } catch (error) {
         console.error(error)
     }
@@ -63,7 +68,7 @@ function imprimirProductos(listaDeLosProductos) {
     asignarEventosActualizar();
 }
 
-document.getElementById('product-form').addEventListener('submit', agregarProducto);
+document.getElementById('btn-formulario').addEventListener('click', agregarProducto);
 
 async function agregarProducto(evento) {
     evento.preventDefault();  // Evita que recargue la página
@@ -106,84 +111,88 @@ async function agregarProducto(evento) {
 
 // Función que elimina el producto por su id
 async function eliminarProducto(id) {
-    const confirmar =confirm("seguro que desea eliminar el producto")
-    if(confirmar){
-        const respuesta=await fetch(`http://localhost:3000/productos/${id}`,{
-            method:"DELETE"
+    const confirmar = confirm("seguro que desea eliminar el producto")
+    if (confirmar) {
+        const respuesta = await fetch(`http://localhost:3000/productos/${id}`, {
+            method: "DELETE"
         })
-        if(respuesta.ok){
-        alert("Producto eliminado")
-        traerProductos()
-    }
+        if (respuesta.ok) {
+            alert("Producto eliminado")
+            traerProductos()
+        }
 
 
     }
 
-    
-    
+
+
 }
 
 
 // Función que asigna el evento click a cada botón eliminar
 function asignarEventosEliminar() {
-   const botonesEliminar = document.querySelectorAll('.eliminar-btn');
+    const botonesEliminar = document.querySelectorAll('.eliminar-btn');
     botonesEliminar.forEach(btn => {
-        
-        btn.addEventListener('click', (e)=>{
+
+        btn.addEventListener('click', (e) => {
             const id = e.currentTarget.getAttribute("data-id")
             eliminarProducto(id)
 
         });
-   });
+    });
 }
 
 
-async function actualizarProducto(id,nombre,stock,precioUnidad,descripcion){
+function actualizarProducto(id, nombre, stock, precioUnidad, descripcion) {
     const nombreInput = document.getElementById('nombre');
     const precioInput = (document.getElementById('precio'));
     const stockInput = (document.getElementById('stock'));
     const descripcionInput = document.getElementById('descripcion');
-    
+
     nombreInput.value = nombre;
-    precioInput.value= parseFloat(precioUnidad);
-    stockInput.value= parseInt(stock);
-    descripcionInput.value=descripcion;
-    
-    const productosActualizados=[
+    precioInput.value = parseFloat(precioUnidad);
+    stockInput.value = parseInt(stock);
+    descripcionInput.value = descripcion;
+
+    const btnActualizar = document.querySelector("#btn-formulario")
+    btnActualizar.textContent = 'Actualizar'
+    btnActualizar.removeEventListener("click", agregarProducto)
+    btnActualizar.addEventListener("click", async (evento) => {
+        evento.preventDefault();
+        const productosActualizado =
         {
-            nombre:nombreInput.value,
-            precio:precioInput.value,
-            stock:stockInput.value,
-            descripcion:descripcionInput.value
+            nombre: nombreInput.value,
+            precio: precioInput.value,
+            stock: parseInt(stockInput.value),
+            descripcion: descripcionInput.value
 
         }
-    ]
-    const respuesta = await fetch (`http://localhost:3000/productos/${id}`,{
-            method:"PUT"
-        }) 
+        const respuesta = await fetch(`http://localhost:3000/productos/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(productosActualizado)
+        });
+        const data = await respuesta.json()
 
-
-
+        traerProductos()
+    })
 
 }
 function asignarEventosActualizar() {
-   const botonesActualizar = document.querySelectorAll("#editar-btn");
+    const botonesActualizar = document.querySelectorAll("#editar-btn");
     botonesActualizar.forEach(btn => {
-        
-        btn.addEventListener('click', (e)=>{
+
+        btn.addEventListener('click', (e) => {
             const id = e.currentTarget.getAttribute("data-id")
-           
             const nombre = e.currentTarget.getAttribute("data-nombre")
             const stock = e.currentTarget.getAttribute("data-stock")
             const precioUnidad = e.currentTarget.getAttribute("data-precioUnidad")
             const descripcion = e.currentTarget.getAttribute("data-descripcion")
-
-            actualizarProducto(id,nombre,stock,precioUnidad,descripcion)
-           
-           
-
+            actualizarProducto(id, nombre, stock, precioUnidad, descripcion)
         });
-   });
+    });
 }
 
 

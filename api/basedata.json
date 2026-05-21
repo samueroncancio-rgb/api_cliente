@@ -1,46 +1,12 @@
 {
   "productos": [
     {
-      "id": "002",
-      "nombre": "Mause",
-      "precioUnidad": 80000,
-      "stock": 87,
-      "descripcion": "Mause inalambrico"
-    },
-    {
-      "nombre": "Telefono samsung glx26",
-      "precioUnidad": 50000,
-      "stock": 20,
-      "descripcion": "Telefono samsung de 240 gb de almacenamiento",
-      "id": "rc8tn0R"
-    },
-    {
-      "nombre": "Teclado ",
-      "precioUnidad": 45000,
-      "stock": 25,
-      "descripcion": "Teclado mecanico",
-      "id": "rhaSSm3"
-    },
-    {
-      "nombre": "Monitor led",
-      "precioUnidad": 200000,
-      "stock": 10,
-      "descripcion": "monitor led de 45\"",
-      "id": "vKmT11b"
-    },
-    {
-      "nombre": "Audifonos",
-      "precioUnidad": 48000,
-      "stock": 24,
-      "descripcion": "Audifonos de cable",
-      "id": "_D0DcvZ"
-    },
-    {
-      "nombre": "Celular pixel serie c",
-      "precioUnidad": 1000000,
-      "stock": 12,
-      "descripcion": "Ram 16 gb y 500 gb de almacenamiento",
-      "id": "jiHuvSz"
+      "nombre": "Portatil Asus",
+      "precioUnidad": 2500000,
+      "stock": 1222,
+      "descripcion": "Portatil Asus de 24 de ram y 1 thera de almacenamiento",
+      "id": "P6AnZQR",
+      "precio": "2500000"
     },
     {
       "nombre": "Portatil Asus",
@@ -49,40 +15,47 @@
       "descripcion": "Portatil Asus de 24 de ram y 1 thera de almacenamiento",
       "id": "P6AnZQR"
     },
-     {
+    {
       "nombre": "Portatil Asus",
       "precioUnidad": 2500000,
       "stock": 12,
       "descripcion": "Portatil Asus de 24 de ram y 1 thera de almacenamiento",
       "id": "P6AnZQR"
     },
-     {
-      "nombre": "Portatil Asus",
-      "precioUnidad": 2500000,
-      "stock": 12,
-      "descripcion": "Portatil Asus de 24 de ram y 1 thera de almacenamiento",
-      "id": "P6AnZQR"
-    },
-     {
+    {
       "nombre": "CPU",
       "precioUnidad": 2500000,
       "stock": 12,
       "descripcion": "CPU de 32 de ram y 1 thera de almacenamiento",
       "id": "P6AnZQR"
     },
-     {
+    {
       "nombre": "Portatil HP",
       "precioUnidad": 2500000,
       "stock": 12,
       "descripcion": "Portatil HP de 24 de ram y 1 thera de almacenamiento",
       "id": "P6AnZQR"
     },
-     {
+    {
       "nombre": "Portatil Lenovo",
       "precioUnidad": 2500000,
       "stock": 12,
       "descripcion": "Portatil Lenovo de 24 de ram y 1 thera de almacenamiento",
       "id": "P6AnZQR"
+    },
+    {
+      "nombre": "Mause",
+      "precioUnidad": 80000,
+      "stock": 42,
+      "descripcion": "Mause inalambricfdfh",
+      "id": "fri8KZL"
+    },
+    {
+      "nombre": "Telefono samsung glx26",
+      "precioUnidad": 50000,
+      "stock": 27,
+      "descripcion": "Telefono samsung de 240 gb de almacena",
+      "id": "BcCwtmJ"
     }
   ]
 }
